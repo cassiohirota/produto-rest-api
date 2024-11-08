@@ -10,8 +10,7 @@ namespace ProductCatalogApi.Models {
         public string Nome { get; set; }
         public string Desc { get; set; }
         public string Marca { get; set; }
-        public string Tipo { get; set; }
-        public string Categoria { get; set; }
+        public Categoria Categoria { get; set; }
         public int Qtd { get; set; }
         public float Preco { get; set; }
     }

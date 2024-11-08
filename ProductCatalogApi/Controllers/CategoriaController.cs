@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using ProductCatalogApi.Models;
 using ProductCatalogApi.Services;
 
@@ -19,36 +20,43 @@ namespace ProductCatalogApi.Controllers {
 
         //Busca todas as categorias
         [HttpGet]
-        public async Task<List<Categoria>> GetAllCategorias() => await _categoriaService.GetAsync();
+        public async Task<ActionResult<List<Categoria>>> GetAllCategorias() {
+            var listCateg = await _categoriaService.GetAllAsync();
+
+            if (listCateg is null || !listCateg.Any()) {
+                return NotFound();
+            }
+            return Ok(listCateg);
+        }
 
         //Busca uma categoria
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<Categoria>> GetCategoria(string id) {
-            var categoria = await _categoriaService.GetAsync(id);
+            var categoria = await _categoriaService.GetOneAsync(id);
 
             if (categoria is null) {
                 return NotFound();
             }
-
-            return categoria;
+            
+            return Ok(categoria);
         }
-
+        
         //POST
 
         //Cria categoria
         [HttpPost]
-        public async Task<IActionResult> PostCategoria(Categoria categ) {
-            await _categoriaService.CreateAsync(categ);
+        public async Task<ActionResult> PostCategoria(Categoria categoria) {
+            await _categoriaService.CreateAsync(categoria);
 
-            return CreatedAtAction(nameof(GetAllCategorias), new { id = categ.Id }, categ);
+            return CreatedAtAction(nameof(GetAllCategorias), new { id = categoria.Id }, categoria);
         }
 
         //PUT
 
         //Atualiza uma categoria
         [HttpPut("{id:length(24)}")]
-        public async Task<IActionResult> UpdateCategoria(string id, Categoria categoriaAlter) {
-            var categoria = await _categoriaService.GetAsync(id);
+        public async Task<ActionResult> UpdateCategoria(string id, Categoria categoriaAlter) {
+            var categoria = await _categoriaService.GetOneAsync(id);
 
             if (categoria is null) {
                 return NotFound();
@@ -65,8 +73,8 @@ namespace ProductCatalogApi.Controllers {
 
         //Deleta uma categoria
         [HttpDelete("{id:length(24)}")]
-        public async Task<IActionResult> DeleteCategoria(string id) {
-            var categoria = await _categoriaService.GetAsync(id);
+        public async Task<ActionResult> DeleteCategoria(string id) {
+            var categoria = await _categoriaService.GetOneAsync(id);
 
             if (categoria is null) {
                 return NotFound();

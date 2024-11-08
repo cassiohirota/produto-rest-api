@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using ProductCatalogApi.Models;
 
@@ -17,9 +18,9 @@ namespace ProductCatalogApi.Services {
         }
 
         //GET
-        public async Task<List<Categoria>> GetAsync() => await _categoriaCollection.Find(x => true).ToListAsync();
+        public async Task<List<Categoria>> GetAllAsync() => await _categoriaCollection.Find(x => true).ToListAsync();
 
-        public async Task<Categoria> GetAsync(string id) => await _categoriaCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        public async Task<Categoria> GetOneAsync(string id) => await _categoriaCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
         //POST
         public async Task CreateAsync(Categoria categoria) => await _categoriaCollection.InsertOneAsync(categoria);
