@@ -5,20 +5,23 @@ using ProductCatalogApi.Models;
 using ProductCatalogApi.Services;
 
 namespace ProductCatalogApi.Controllers {
-    [Route("api/[controller]")]
+    [Route("v1/[controller]")]
     [ApiController]
-    public class CategoriaController : ControllerBase {
+    public class categoriasController : ControllerBase {
 
         private readonly CategoriaServices _categoriaService;
 
-        public CategoriaController(CategoriaServices categoriaService) {
+        public categoriasController(CategoriaServices categoriaService) {
 
             _categoriaService = categoriaService;
         }
 
         //GET
 
-        //Busca todas as categorias
+        /// <summary>
+        /// Lista todas as categorias registradas
+        /// </summary>
+        /// <returns> Retorna todas as categorias registradas </returns>
         [HttpGet]
         public async Task<ActionResult<List<Categoria>>> GetAllCategorias() {
             var listCateg = await _categoriaService.GetAllAsync();
@@ -29,7 +32,10 @@ namespace ProductCatalogApi.Controllers {
             return Ok(listCateg);
         }
 
-        //Busca uma categoria
+        /// <summary>
+        /// Busca uma categoria
+        /// </summary>
+        /// <returns> Retorna a categoria encontrada </returns>
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<Categoria>> GetCategoria(string id) {
             var categoria = await _categoriaService.GetOneAsync(id);
@@ -37,13 +43,16 @@ namespace ProductCatalogApi.Controllers {
             if (categoria is null) {
                 return NotFound();
             }
-            
+
             return Ok(categoria);
         }
-        
+
         //POST
 
-        //Cria categoria
+        /// <summary>
+        /// Cria uma categoria
+        /// </summary>
+        /// <returns> Retorna a categoria registrada </returns>
         [HttpPost]
         public async Task<ActionResult> PostCategoria(Categoria categoria) {
             await _categoriaService.CreateAsync(categoria);
@@ -53,7 +62,11 @@ namespace ProductCatalogApi.Controllers {
 
         //PUT
 
-        //Atualiza uma categoria
+        /// <summary>
+        /// Altera os dados de uma categoria
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPut("{id:length(24)}")]
         public async Task<ActionResult> UpdateCategoria(string id, Categoria categoriaAlter) {
             var categoria = await _categoriaService.GetOneAsync(id);
@@ -71,7 +84,11 @@ namespace ProductCatalogApi.Controllers {
 
         //DELETE
 
-        //Deleta uma categoria
+        /// <summary>
+        /// Exclui uma categoria
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id:length(24)}")]
         public async Task<ActionResult> DeleteCategoria(string id) {
             var categoria = await _categoriaService.GetOneAsync(id);
