@@ -65,7 +65,7 @@ http://localhost:5171/v1/produtos/filter
 http://localhost:5171/v1/produtos/query
 ```
 Método POST
-* 
+* Cria um produto
 ```
 http://localhost:5171/v1/produtos
 ```
