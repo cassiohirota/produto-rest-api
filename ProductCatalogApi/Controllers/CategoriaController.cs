@@ -24,7 +24,7 @@ namespace ProductCatalogApi.Controllers {
         /// <returns> Retorna todas as categorias registradas </returns>
         [HttpGet]
         public async Task<ActionResult<List<Categoria>>> GetAllCategorias() {
-            var listCateg = await _categoriaService.GetAllAsync();
+            var listCateg = await _categoriaService.GetAllCategories();
 
             if (listCateg is null || !listCateg.Any()) {
                 return NotFound();
@@ -36,9 +36,9 @@ namespace ProductCatalogApi.Controllers {
         /// Busca uma categoria
         /// </summary>
         /// <returns> Retorna a categoria encontrada </returns>
-        [HttpGet("{id:length(24)}")]
-        public async Task<ActionResult<Categoria>> GetCategoria(string id) {
-            var categoria = await _categoriaService.GetOneAsync(id);
+        [HttpGet("{categoriaId:length(24)}")]
+        public async Task<ActionResult<Categoria>> GetCategoria(string categoriaId) {
+            var categoria = await _categoriaService.GetOneCategoryById(categoriaId);
 
             if (categoria is null) {
                 return NotFound();
@@ -55,7 +55,7 @@ namespace ProductCatalogApi.Controllers {
         /// <returns> Retorna a categoria registrada </returns>
         [HttpPost]
         public async Task<ActionResult> PostCategoria(Categoria categoria) {
-            await _categoriaService.CreateAsync(categoria);
+            await _categoriaService.CreateOneCategory(categoria);
 
             return CreatedAtAction(nameof(GetAllCategorias), new { id = categoria.Id }, categoria);
         }
@@ -65,11 +65,11 @@ namespace ProductCatalogApi.Controllers {
         /// <summary>
         /// Altera os dados de uma categoria
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="categoriaId"></param>
         /// <returns></returns>
-        [HttpPut("{id:length(24)}")]
-        public async Task<ActionResult> UpdateCategoria(string id, Categoria categoriaAlter) {
-            var categoria = await _categoriaService.GetOneAsync(id);
+        [HttpPut("{categoriaId:length(24)}")]
+        public async Task<ActionResult> UpdateCategoria(string categoriaId, Categoria categoriaAlter) {
+            var categoria = await _categoriaService.GetOneCategoryById(categoriaId);
 
             if (categoria is null) {
                 return NotFound();
@@ -77,7 +77,7 @@ namespace ProductCatalogApi.Controllers {
 
             categoriaAlter.Id = categoria.Id;
 
-            await _categoriaService.UpdateAsync(id, categoriaAlter);
+            await _categoriaService.UpdateOneCategory(categoriaId, categoriaAlter);
 
             return NoContent();
         }
@@ -87,17 +87,17 @@ namespace ProductCatalogApi.Controllers {
         /// <summary>
         /// Exclui uma categoria
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="categoriaId"></param>
         /// <returns></returns>
-        [HttpDelete("{id:length(24)}")]
-        public async Task<ActionResult> DeleteCategoria(string id) {
-            var categoria = await _categoriaService.GetOneAsync(id);
+        [HttpDelete("{categoriaId:length(24)}")]
+        public async Task<ActionResult> DeleteCategoria(string categoriaId) {
+            var categoria = await _categoriaService.GetOneCategoryById(categoriaId);
 
             if (categoria is null) {
                 return NotFound();
             }
 
-            await _categoriaService.RemoveAsync(id);
+            await _categoriaService.RemoveOneCategory(categoriaId);
 
             return NoContent();
         }

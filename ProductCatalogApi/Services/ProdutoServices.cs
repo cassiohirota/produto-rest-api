@@ -22,10 +22,14 @@ namespace ProductCatalogApi.Services {
         }
 
         //GET
-        public async Task<List<Produto>> GetAllAsync() => await _produtoCollection.Find(x => true).ToListAsync();
-        public async Task<Produto> GetOneAsync(string id) => await _produtoCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
-        public async Task<List<Produto>> GetListAsync(string id) => await _produtoCollection.Find(x => x.Categoria.Id == id).ToListAsync();
-        public async Task<List<Produto>> GetAllFilteredAsync( string nome, decimal? precoMin, decimal? precoMax) {
+        //O método busca todos os produtos registrados
+        public async Task<List<Produto>> GetAllProducts() => await _produtoCollection.Find(x => true).ToListAsync();
+        //O método busca o produto pelo Id
+        public async Task<Produto> GetOneProductById(string id) => await _produtoCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        //O método lista todos os produtos que pertencem a mesma categoria
+        public async Task<List<Produto>> GetListProductsByCategoryId(string id) => await _produtoCollection.Find(x => x.Categoria.Id == id).ToListAsync();
+        //O método lista os produtos por nome, preço mínimo e preço máximo
+        public async Task<List<Produto>> GetListProductsByFilter( string nome, decimal? precoMin, decimal? precoMax) {
 
             var listProd = await _produtoCollection.Find(x => true).ToListAsync();
 
@@ -41,8 +45,8 @@ namespace ProductCatalogApi.Services {
 
             return listProd;
         }
-
-        public async Task<List<Produto>> GetAllByPageAsync(int? page, int? pageSize) {
+        //O método lista os produtos por paginação
+        public async Task<List<Produto>> GetListByPage(int? page, int? pageSize) {
             
             if (page is null) { page = 1; }
             if (pageSize is null) { pageSize = 10; }
@@ -55,11 +59,14 @@ namespace ProductCatalogApi.Services {
         }
 
         //POST
-        public async Task CreateAsync(Produto produto) => await _produtoCollection.InsertOneAsync(produto);
+        //O método registra um produto
+        public async Task CreateOneProduct(Produto produto) => await _produtoCollection.InsertOneAsync(produto);
 
         //PUT
-        public async Task UpdateAsync(string id, Produto produto) => await _produtoCollection.ReplaceOneAsync(x => x.Id == id, produto);
-        public async Task UpdateCategAsync(string id, Produto produto) {
+        //O método altera os dados de um produto
+        public async Task UpdateOneProductById(string id, Produto produto) => await _produtoCollection.ReplaceOneAsync(x => x.Id == id, produto);
+        //O método altera a categoria de um produto
+        public async Task UpdateCategOfOneProduct(string id, Produto produto) {
 
             Categoria categ = await _categoriaCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
             produto.Categoria = categ;
@@ -67,7 +74,8 @@ namespace ProductCatalogApi.Services {
         }
 
         //DELETE
-        public async Task RemoveAsync(string id) => await _produtoCollection.DeleteOneAsync(x => x.Id == id);
+        //O método exclui um produto
+        public async Task RemoveOneProduct(string id) => await _produtoCollection.DeleteOneAsync(x => x.Id == id);
     }
 
 }

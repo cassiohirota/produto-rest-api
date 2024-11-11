@@ -18,17 +18,22 @@ namespace ProductCatalogApi.Services {
         }
 
         //GET
-        public async Task<List<Categoria>> GetAllAsync() => await _categoriaCollection.Find(x => true).ToListAsync();
+        //O método busca todas as categorias registradas
+        public async Task<List<Categoria>> GetAllCategories() => await _categoriaCollection.Find(x => true).ToListAsync();
 
-        public async Task<Categoria> GetOneAsync(string id) => await _categoriaCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        //O método busca a categoria pelo Id
+        public async Task<Categoria> GetOneCategoryById(string id) => await _categoriaCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
         //POST
-        public async Task CreateAsync(Categoria categoria) => await _categoriaCollection.InsertOneAsync(categoria);
+        //O método registra uma categoria
+        public async Task CreateOneCategory(Categoria categoria) => await _categoriaCollection.InsertOneAsync(categoria);
 
         //PUT
-        public async Task UpdateAsync(string id, Categoria categoria) => await _categoriaCollection.ReplaceOneAsync(x => x.Id == id, categoria);
-        
+        //O método altera os dados de um categoria
+        public async Task UpdateOneCategory(string id, Categoria categoria) => await _categoriaCollection.ReplaceOneAsync(x => x.Id == id, categoria);
+
         //DELETE
-        public async Task RemoveAsync(string id) => await _categoriaCollection.DeleteOneAsync(x => x.Id == id);
+        //O método exclui uma categoria
+        public async Task RemoveOneCategory(string id) => await _categoriaCollection.DeleteOneAsync(x => x.Id == id);
     }
 }
